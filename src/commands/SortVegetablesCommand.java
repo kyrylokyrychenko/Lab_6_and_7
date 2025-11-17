@@ -1,13 +1,23 @@
 package commands;
 
+import salad.Salad;
+
 public class SortVegetablesCommand implements Command {
+
+    private Salad salad;
+
+    public SortVegetablesCommand(Salad salad) {
+        this.salad = salad;
+    }
+
     @Override
     public void execute() {
-        System.out.println("\nСортувати овочі (ще не реалізовано)");
+        salad.sortByCalories();
+        System.out.println("\nОвочі відсортовано за калорійністю.");
     }
 
     @Override
     public String getDesc() {
-        return "Сортування овочів що належать до салату за одним з параметрів";
+        return "Сортувати овочі за калорійністю";
     }
 }

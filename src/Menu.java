@@ -1,22 +1,24 @@
 import java.util.*;
 import commands.*;
+import salad.Salad;
 
 class Menu {
     private Map<String, Command> commands = new LinkedHashMap<>();
     private Scanner sc = new Scanner(System.in);
+    private Salad salad = new Salad();   // порожній салат на старті
 
     public Menu() {
         init();
     }
 
-    public void init() {
-        commands.put("додати", new AddVegetableCommand());
-        commands.put("показати", new ShowSaladCommand());
-        commands.put("підрахувати", new CalculateCaloriesCommand());
-        commands.put("сортувати", new SortVegetablesCommand());
-        commands.put("знайти", new FindVegetablesByCaloriesCommand());
-        commands.put("видалити", new RemoveVegetableCommand());
-        commands.put("оновити", new UpdateVegetableCommand());
+     protected void init() {
+        commands.put("додати", new AddVegetableCommand(salad));
+        commands.put("показати", new ShowSaladCommand(salad));
+        commands.put("підрахувати", new CalculateCaloriesCommand(salad));
+        commands.put("сортувати", new SortVegetablesCommand(salad));
+        commands.put("знайти", new FindVegetablesByCaloriesCommand(salad));
+        commands.put("видалити", new RemoveVegetableCommand(salad));
+        commands.put("оновити", new UpdateVegetableCommand(salad));
     }
 
     public void show() {

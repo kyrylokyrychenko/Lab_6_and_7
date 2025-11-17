@@ -1,13 +1,23 @@
 package commands;
 
+import salad.Salad;
+
 public class CalculateCaloriesCommand implements Command {
+
+    private Salad salad;
+
+    public CalculateCaloriesCommand(Salad salad) {
+        this.salad = salad;
+    }
+
     @Override
     public void execute() {
-        System.out.println("\nПідрахунок калорій (ще не реалізовано)");
+        double total = salad.getTotalCalories();
+        System.out.println("\nЗагальна калорійність салату: " + total + " ккал");
     }
 
     @Override
     public String getDesc() {
-        return "Підрахування калорійності салату";
+        return "Підрахувати калорійність салату";
     }
 }
