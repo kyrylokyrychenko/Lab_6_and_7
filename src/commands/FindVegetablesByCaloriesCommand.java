@@ -2,13 +2,14 @@ package commands;
 
 import salad.Salad;
 import vegetables.Vegetable;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class FindVegetablesByCaloriesCommand implements Command {
 
-    private Salad salad;
-    private Scanner sc = new Scanner(System.in);
+    private final Salad salad;
+    private final Scanner sc = new Scanner(System.in);
 
     public FindVegetablesByCaloriesCommand(Salad salad) {
         this.salad = salad;
@@ -16,23 +17,27 @@ public class FindVegetablesByCaloriesCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Мінімум калорій: ");
-        double min = Double.parseDouble(sc.nextLine());
+        double min = requestDouble("Мінімум калорій: ");
+        double max = requestDouble("Максимум калорій: ");
 
-        System.out.print("Максимум калорій: ");
-        double max = Double.parseDouble(sc.nextLine());
+        List<Vegetable> result = salad.findByCalories(min, max);
+        printResult(result);
+    }
 
-        List<Vegetable> res = salad.findByCalories(min, max);
+    private double requestDouble(String message) {
+        System.out.print(message);
+        return Double.parseDouble(sc.nextLine());
+    }
 
-        System.out.println("\nОвочі в цьому діапазоні:");
-        if (res.isEmpty()) {
+    private void printResult(List<Vegetable> vegetables) {
+        System.out.println("\nОвочі в заданому діапазоні:");
+
+        if (vegetables.isEmpty()) {
             System.out.println("Нічого не знайдено.");
             return;
         }
 
-        for (Vegetable v : res) {
-            System.out.println(v);
-        }
+        vegetables.forEach(System.out::println);
     }
 
     @Override

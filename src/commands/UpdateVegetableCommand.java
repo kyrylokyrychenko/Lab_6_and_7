@@ -2,12 +2,13 @@ package commands;
 
 import salad.Salad;
 import vegetables.Vegetable;
+
 import java.util.Scanner;
 
 public class UpdateVegetableCommand implements Command {
 
-    private Salad salad;
-    private Scanner sc = new Scanner(System.in);
+    private final Salad salad;
+    private final Scanner sc = new Scanner(System.in);
 
     public UpdateVegetableCommand(Salad salad) {
         this.salad = salad;
@@ -15,22 +16,36 @@ public class UpdateVegetableCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введіть номер овоча для оновлення: ");
-        int index = Integer.parseInt(sc.nextLine());
+        int index = requestIndex();
 
-        if (index < 1 || index > salad.getVegetables().size()) {
+        if (!isValidIndex(index)) {
             System.out.println("Некоректний номер!");
             return;
         }
 
-        Vegetable v = salad.getVegetables().get(index-1);
-
-        System.out.print("Нова вага (г): ");
-        double newWeight = Double.parseDouble(sc.nextLine());
-
-        v.setWeight(newWeight);
+        double newWeight = requestWeight();
+        updateWeight(index - 1, newWeight);
 
         System.out.println("Овоч оновлено.");
+    }
+
+    private int requestIndex() {
+        System.out.print("Введіть номер овоча для оновлення: ");
+        return Integer.parseInt(sc.nextLine());
+    }
+
+    private boolean isValidIndex(int index) {
+        return index >= 1 && index <= salad.getVegetables().size();
+    }
+
+    private double requestWeight() {
+        System.out.print("Нова вага (г): ");
+        return Double.parseDouble(sc.nextLine());
+    }
+
+    private void updateWeight(int index, double weight) {
+        Vegetable v = salad.getVegetables().get(index);
+        v.setWeight(weight);
     }
 
     @Override

@@ -4,7 +4,7 @@ import salad.Salad;
 
 public class SortVegetablesCommand implements Command {
 
-    private Salad salad;
+    private final Salad salad;
 
     public SortVegetablesCommand(Salad salad) {
         this.salad = salad;

@@ -52,6 +52,10 @@ class Menu {
         }
     }
 
+    public Map<String, Command> getCommands() {
+        return commands;
+    }
+
 }
 
 

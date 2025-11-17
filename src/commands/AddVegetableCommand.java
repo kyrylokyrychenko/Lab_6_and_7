@@ -4,18 +4,37 @@ import java.util.Scanner;
 import vegetables.*;
 import salad.Salad;
 
-
 public class AddVegetableCommand implements Command {
 
-    private Salad salad;          // Salad з кореневого пакету
-    private Scanner sc = new Scanner(System.in);
+    private Salad salad;
+    private Scanner sc;
 
     public AddVegetableCommand(Salad salad) {
+        this(salad, new Scanner(System.in));
+    }
+
+    // Конструктор для тестів (передаємо свій Scanner)
+    public AddVegetableCommand(Salad salad, Scanner sc) {
         this.salad = salad;
+        this.sc = sc;
     }
 
     @Override
     public void execute() {
+        showMenu();
+        String choice = sc.nextLine();
+
+        double weight = requestWeight();
+
+        Vegetable veg = createVegetable(choice, weight);
+
+        if (veg != null)
+            salad.add(veg);
+        else
+            System.out.println("Невірний вибір.");
+    }
+
+    private void showMenu() {
         System.out.println("\nОберіть овоч:");
         System.out.println("1 — Морква");
         System.out.println("2 — Помідор");
@@ -24,21 +43,24 @@ public class AddVegetableCommand implements Command {
         System.out.println("5 — Капуста");
         System.out.println("6 — Перець");
         System.out.print("Ваш вибір: ");
+    }
 
-        String choice = sc.nextLine();
-
+    private double requestWeight() {
         System.out.print("Введіть вагу (в грамах): ");
-        double weight = Double.parseDouble(sc.nextLine());
+        return Double.parseDouble(sc.nextLine());
+    }
 
-        switch (choice) {
-            case "1" -> salad.add(new Carrot(weight));
-            case "2" -> salad.add(new Tomato(weight));
-            case "3" -> salad.add(new Cucumber(weight));
-            case "4" -> salad.add(new Onion(weight));
-            case "5" -> salad.add(new Cabbage(weight));
-            case "6" -> salad.add(new Pepper(weight));
-            default -> System.out.println("Невірний вибір.");
-        }
+    // Окрема логіка — тепер легко тестувати!
+    protected Vegetable createVegetable(String choice, double weight) {
+        return switch (choice) {
+            case "1" -> new Carrot(weight);
+            case "2" -> new Tomato(weight);
+            case "3" -> new Cucumber(weight);
+            case "4" -> new Onion(weight);
+            case "5" -> new Cabbage(weight);
+            case "6" -> new Pepper(weight);
+            default -> null;
+        };
     }
 
     @Override

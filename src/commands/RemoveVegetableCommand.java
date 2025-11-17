@@ -1,12 +1,13 @@
 package commands;
 
 import salad.Salad;
+
 import java.util.Scanner;
 
 public class RemoveVegetableCommand implements Command {
 
-    private Salad salad;
-    private Scanner sc = new Scanner(System.in);
+    private final Salad salad;
+    private final Scanner sc = new Scanner(System.in);
 
     public RemoveVegetableCommand(Salad salad) {
         this.salad = salad;
@@ -14,14 +15,24 @@ public class RemoveVegetableCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введіть номер овоча для видалення: ");
-        int index = Integer.parseInt(sc.nextLine());
-        if (index < 1 || index > salad.getVegetables().size()) {
+        int index = requestIndex();
+
+        if (!isValidIndex(index)) {
             System.out.println("Некоректний номер!");
             return;
         }
-        salad.remove(index-1);
-        System.out.println("Овоч видалено (якщо індекс був коректним).");
+
+        salad.remove(index - 1);
+        System.out.println("Овоч видалено.");
+    }
+
+    private int requestIndex() {
+        System.out.print("Введіть номер овоча для видалення: ");
+        return Integer.parseInt(sc.nextLine());
+    }
+
+    private boolean isValidIndex(int index) {
+        return index >= 1 && index <= salad.getVegetables().size();
     }
 
     @Override

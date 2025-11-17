@@ -1,28 +1,36 @@
 package salad;
 
 import vegetables.Vegetable;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Salad {
 
-    private List<Vegetable> vegetables = new ArrayList<>();
+    private final List<Vegetable> vegetables = new ArrayList<>();
 
-    public void add(Vegetable v) { vegetables.add(v); }
+    public void add(Vegetable v) {
+        if (v == null) {
+            throw new IllegalArgumentException("Овоч не може бути null.");
+        }
+        vegetables.add(v);
+    }
 
-    public List<Vegetable> getVegetables() { return vegetables; }
-
-//    public int getsize() {
-//        int size = vegetables.size();
-//        return size;
-//    }
+    public List<Vegetable> getVegetables() {
+        return Collections.unmodifiableList(vegetables);
+    }
 
     public void remove(int index) {
-
-            vegetables.remove(index);
+        validateIndex(index);
+        vegetables.remove(index);
     }
 
     public double getTotalCalories() {
-        return vegetables.stream().mapToDouble(Vegetable::getTotalCalories).sum();
+        return vegetables.stream()
+                .mapToDouble(Vegetable::getTotalCalories)
+                .sum();
     }
 
     public void sortByCalories() {
@@ -30,11 +38,17 @@ public class Salad {
     }
 
     public List<Vegetable> findByCalories(double min, double max) {
-        List<Vegetable> res = new ArrayList<>();
-        for (Vegetable v : vegetables) {
-            double cal = v.getTotalCalories();
-            if (cal >= min && cal <= max) res.add(v);
+        return vegetables.stream()
+                .filter(v -> {
+                    double c = v.getTotalCalories();
+                    return c >= min && c <= max;
+                })
+                .toList();
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index >= vegetables.size()) {
+            throw new IndexOutOfBoundsException("Некоректний індекс овоча.");
         }
-        return res;
     }
 }
